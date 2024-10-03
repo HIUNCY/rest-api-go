@@ -18,7 +18,7 @@ func NewUserHandler(userService service.UserService) *UserHandler {
 
 func (h *UserHandler) Register(c *gin.Context) {
 	var user model.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.Bind(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
@@ -34,7 +34,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 func (h *UserHandler) Login(c *gin.Context) {
 	var userLogin model.UserLogin
 
-	if err := c.ShouldBindJSON(&userLogin); err != nil {
+	if err := c.Bind(&userLogin); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
