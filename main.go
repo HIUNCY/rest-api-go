@@ -5,6 +5,7 @@ import (
 	"github.com/HIUNCY/rest-api-go/model"
 	"github.com/HIUNCY/rest-api-go/repository"
 	"github.com/HIUNCY/rest-api-go/service"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,6 +25,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	user := r.Group("/user")
 	{
 		user.POST("/login", userHandler.Login)
