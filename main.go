@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(mysql.Open("sql12734405:HCwYzkUDCB@tcp(sql12.freesqldatabase.com:3306)/sql12734405?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:WyOuRPHnvSHOlRMmbRhzESwdWHCuPYVm@tcp(autorack.proxy.rlwy.net:56977)/tabungan?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
