@@ -13,37 +13,41 @@ type UserHandler struct {
 }
 
 func NewUserHandler(userService service.UserService) *UserHandler {
-	return &UserHandler{userService}
+	return &UserHandler{userService: userService}
 }
 
+// Register handler for user registration
 func (h *UserHandler) Register(c *gin.Context) {
 	var user model.User
-	if err := c.Bind(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := h.userService.Register(&user); err != nil {
+	userRegistered, err := h.userService.Register(&user)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+	c.JSON(http.StatusOK, userRegistered)
 }
 
+// Login handler for user authentication
 func (h *UserHandler) Login(c *gin.Context) {
-	var userLogin model.UserLogin
+	var user model.UserLogin
 
-	if err := c.Bind(&userLogin); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := h.userService.Login(userLogin.Email, userLogin.Password)
+	userLogin, err := h.userService.Login(user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": user})
+	c.JSON(http.StatusOK, userLogin)
 }

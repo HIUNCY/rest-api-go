@@ -2,16 +2,21 @@ package model
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        uint      `gorm:"primaryKey;autoIncrement" json:"id"`
-	Username  string    `gorm:"type:varchar(50);not null" json:"username" form:"username"`
-	Email     string    `gorm:"type:varchar(100);unique;not null" json:"email" form:"email"`
-	Password  string    `gorm:"type:varchar(255);not null" json:"password" form:"password"`
-	Role      string    `gorm:"type:enum('admin', 'staff', 'user');default:'user';not null" json:"role"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	gorm.Model
+	UserID      uint      `gorm:"primaryKey;autoIncrement" json:"user_id"`
+	Username    string    `gorm:"unique;not null" json:"username"`
+	Password    string    `gorm:"not null"`
+	FullName    string    `gorm:"not null" json:"full_name"`
+	Email       string    `gorm:"unique;not null" json:"email"`
+	PhoneNumber string    `json:"phone_number"`
+	Role        string    `gorm:"type:enum('admin','staff','nasabah');not null" json:"role"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type UserLogin struct {
