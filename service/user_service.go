@@ -26,12 +26,9 @@ func NewUserService(userRepo repository.UserRepository) UserService {
 // Register function for creating a new user
 func (s *userService) Register(user *model.User) (*model.User, error) {
 	// Check if username or email already exists
-	existingUser, err := s.userRepo.GetUserByEmail(user.Email)
+	_, err := s.userRepo.GetUserByEmail(user.Email)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
-	}
-	if existingUser != nil {
-		return nil, errors.New("username already exists")
 	}
 
 	// Hash the password
