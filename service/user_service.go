@@ -31,6 +31,10 @@ func (s *userService) Register(user *model.User) (*model.User, error) {
 		return nil, err
 	}
 
+	if user.Role == "" {
+		user.Role = "nasabah"
+	}
+
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
