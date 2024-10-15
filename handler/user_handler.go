@@ -34,7 +34,6 @@ func (h *UserHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, userRegistered)
 }
 
-// Login handler for user authentication
 func (h *UserHandler) Login(c *gin.Context) {
 	var user model.UserLogin
 
@@ -50,4 +49,32 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, userLogin)
+}
+
+func (h *UserHandler) Update(c *gin.Context) {
+	var user model.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.userService.UpdateUser(&user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "user updated successfully"})
+}
+
+func (h *UserHandler) Delete(c *gin.Context) {
+	var user model.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.userService.DeleteUser(user.UserID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "user deleted successfully"})
 }

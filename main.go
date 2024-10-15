@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/HIUNCY/rest-api-go/handler"
-	"github.com/HIUNCY/rest-api-go/model"
 	"github.com/HIUNCY/rest-api-go/repository"
 	"github.com/HIUNCY/rest-api-go/service"
 	"github.com/gin-contrib/cors"
@@ -17,12 +16,14 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&model.User{})
-
 	// USER
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
+	// DEPOSIT
+	depoRepository := repository.NewDepositRepository(db)
+	depoService := service.NewDepositService(depoRepository)
+	depoHandler := handler.NewDepositHandler(depoService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -30,6 +31,15 @@ func main() {
 	{
 		user.POST("/login", userHandler.Login)
 		user.POST("/register", userHandler.Register)
+		user.PUT("/update", userHandler.Update)
+		user.DELETE("/delete", userHandler.Delete)
+	}
+	depo := r.Group("/deposit")
+	{
+		depo.POST("/", depoHandler.GetDepositByNik)
+		depo.POST("/create", depoHandler.Create)
+		depo.PUT("/update", depoHandler.Update)
+		depo.DELETE("/delete", depoHandler.Delete)
 	}
 	r.Run()
 }
