@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetUserByEmail(email string) (*model.User, error)
 	UpdateUser(user *model.User) error
 	DeleteUser(id uint) error
+	GetUserList() (*[]model.User, error)
 }
 
 type userRepository struct {
@@ -23,6 +24,12 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (r *userRepository) CreateUser(user *model.User) error {
 	return r.db.Create(user).Error
+}
+
+func (r *userRepository) GetUserList() (*[]model.User, error) {
+	var users []model.User
+	err := r.db.Find(&users).Error
+	return &users, err
 }
 
 func (r *userRepository) GetUserByID(id uint) (*model.User, error) {

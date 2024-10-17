@@ -29,6 +29,7 @@ func main() {
 	r.Use(cors.Default())
 	user := r.Group("/user")
 	{
+		user.GET("/list", userHandler.GetUserList)
 		user.POST("/login", userHandler.Login)
 		user.POST("/register", userHandler.Register)
 		user.PUT("/update", userHandler.Update)

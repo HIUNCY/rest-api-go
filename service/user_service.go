@@ -15,6 +15,7 @@ type UserService interface {
 	GetUserByID(userID uint) (*model.User, error)
 	UpdateUser(user *model.User) error
 	DeleteUser(userID uint) error
+	GetUserList() (*[]model.User, error)
 }
 
 type userService struct {
@@ -27,6 +28,10 @@ func (s *userService) DeleteUser(userID uint) error {
 
 func (s *userService) UpdateUser(user *model.User) error {
 	return s.userRepo.UpdateUser(user)
+}
+
+func (s *userService) GetUserList() (*[]model.User, error) {
+	return s.userRepo.GetUserList()
 }
 
 func (s *userService) Register(user *model.User) (*model.User, error) {
