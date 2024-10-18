@@ -10,6 +10,7 @@ type DepositService interface {
 	GetDepositByNik(nik string) (*model.Deposit, error)
 	UpdateDeposit(depo *model.Deposit) error
 	DeleteDeposit(nik string) error
+	GetDepositList() (*[]model.Deposit, error)
 }
 
 type depositService struct {
@@ -39,4 +40,8 @@ func (s *depositService) UpdateDeposit(depo *model.Deposit) error {
 
 func NewDepositService(depoRepo repository.DepositRepository) DepositService {
 	return &depositService{depoRepo: depoRepo}
+}
+
+func (s *depositService) GetDepositList() (*[]model.Deposit, error) {
+	return s.depoRepo.GetDepositList()
 }

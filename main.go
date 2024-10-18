@@ -37,7 +37,8 @@ func main() {
 	}
 	depo := r.Group("/deposit")
 	{
-		depo.POST("/", depoHandler.GetDepositByNik)
+		depo.GET("/list", depoHandler.GetDepositList)
+		depo.POST("/search", depoHandler.GetDepositByNik)
 		depo.POST("/create", depoHandler.Create)
 		depo.PUT("/update", depoHandler.Update)
 		depo.DELETE("/delete", depoHandler.Delete)

@@ -72,3 +72,12 @@ func (h *DepositHandler) Delete(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "deposit deleted successfully"})
 }
+
+func (h *DepositHandler) GetDepositList(c *gin.Context) {
+	users, err := h.depoService.GetDepositList()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}

@@ -10,6 +10,7 @@ type DepositRepository interface {
 	GetDepositByNik(nik string) (*model.Deposit, error)
 	UpdateDeposit(depo *model.Deposit) error
 	DeleteDeposit(nik string) error
+	GetDepositList() (*[]model.Deposit, error)
 }
 
 type depositRepository struct {
@@ -36,4 +37,10 @@ func (r *depositRepository) UpdateDeposit(depo *model.Deposit) error {
 
 func NewDepositRepository(db *gorm.DB) DepositRepository {
 	return &depositRepository{db}
+}
+
+func (r *depositRepository) GetDepositList() (*[]model.Deposit, error) {
+	var deposits []model.Deposit
+	err := r.db.Find(&deposits).Error
+	return &deposits, err
 }
