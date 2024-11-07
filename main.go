@@ -24,12 +24,17 @@ func main() {
 	depoRepository := repository.NewDepositRepository(db)
 	depoService := service.NewDepositService(depoRepository)
 	depoHandler := handler.NewDepositHandler(depoService)
+	// TRANSACTION
+	transactionRepository := repository.NewTransactionRepository(db)
+	transactionService := service.NewTransactionService(transactionRepository)
+	transactionHandler := handler.NewTransactionHandler(transactionService)
 
 	r := gin.Default()
 	r.Use(cors.Default())
 	user := r.Group("/user")
 	{
 		user.GET("/list", userHandler.GetUserList)
+		// user.GET("/balance/:nik", userHandler.GetUserList)
 		user.POST("/login", userHandler.Login)
 		user.POST("/register", userHandler.Register)
 		user.PUT("/update", userHandler.Update)
@@ -42,6 +47,10 @@ func main() {
 		depo.POST("/create", depoHandler.Create)
 		depo.PUT("/update", depoHandler.Update)
 		depo.DELETE("/delete", depoHandler.Delete)
+	}
+	transaction := r.Group("/transaction")
+	{
+		transaction.POST("/create", transactionHandler.CreateTransaction)
 	}
 	r.Run()
 }
