@@ -7,6 +7,7 @@ import (
 
 type TransactionService interface {
 	CreateTransaction(income *model.Transaction) error
+	HistoryTransaction(nik string) ([]model.Transaction, error)
 }
 
 type transactionService struct {
@@ -19,4 +20,7 @@ func NewTransactionService(transactionRepo repository.TransactionRepository) Tra
 
 func (s *transactionService) CreateTransaction(income *model.Transaction) error {
 	return s.transactionRepo.CreateTransaction(income)
+}
+func (s *transactionService) HistoryTransaction(nik string) ([]model.Transaction, error) {
+	return s.transactionRepo.HistoryTransaction(nik)
 }

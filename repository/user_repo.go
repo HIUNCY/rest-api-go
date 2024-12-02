@@ -10,7 +10,7 @@ type UserRepository interface {
 	GetUserByID(id uint) (*model.User, error)
 	GetUserByEmail(email string) (*model.User, error)
 	UpdateUser(user *model.User) error
-	DeleteUser(id uint) error
+	DeleteUser(nik string) error
 	GetUserList() (*[]model.User, error)
 }
 
@@ -48,6 +48,6 @@ func (r *userRepository) UpdateUser(user *model.User) error {
 	return r.db.Save(user).Error
 }
 
-func (r *userRepository) DeleteUser(id uint) error {
-	return r.db.Delete(&model.User{}, id).Error
+func (r *userRepository) DeleteUser(nik string) error {
+	return r.db.Delete(&model.User{}, nik).Error
 }

@@ -7,6 +7,7 @@ import (
 
 type TransactionRepository interface {
 	CreateTransaction(income *model.Transaction) error
+	HistoryTransaction(nik string) ([]model.Transaction, error)
 }
 
 type transactionRepository struct {
@@ -19,4 +20,12 @@ func NewTransactionRepository(db *gorm.DB) TransactionRepository {
 
 func (r *transactionRepository) CreateTransaction(income *model.Transaction) error {
 	return r.db.Create(income).Error
+}
+
+func (r *transactionRepository) HistoryTransaction(nik string) ([]model.Transaction, error) {
+	var transaction []model.Transaction
+	if err := r.db.Where("nik = ?", nik).Find(&transaction).Error; err != nil {
+		return nil, err
+	}
+	return transaction, nil
 }

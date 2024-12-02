@@ -72,7 +72,7 @@ func (h *UserHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := h.userService.DeleteUser(user.UserID); err != nil {
+	if err := h.userService.DeleteUser(user.NIK); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
