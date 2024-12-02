@@ -12,21 +12,17 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open(mysql.Open("root:@tcp(127.0.0.1:3306)/tabungan?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:CRNkojvoRMyfovNjlCKNebPnSrEhOxvS@tcp(junction.proxy.rlwy.net:26272)/railway?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&model.User{}, &model.Deposit{}, &model.Transaction{})
+	db.AutoMigrate(&model.User{}, &model.Transaction{})
 
 	// USER
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
-	// DEPOSIT
-	depoRepository := repository.NewDepositRepository(db)
-	depoService := service.NewDepositService(depoRepository)
-	depoHandler := handler.NewDepositHandler(depoService)
 	// TRANSACTION
 	transactionRepository := repository.NewTransactionRepository(db)
 	transactionService := service.NewTransactionService(transactionRepository)
@@ -42,14 +38,6 @@ func main() {
 		user.POST("/register", userHandler.Register)
 		user.PUT("/update", userHandler.Update)
 		user.DELETE("/delete", userHandler.Delete)
-	}
-	depo := r.Group("/deposit")
-	{
-		depo.GET("/list", depoHandler.GetDepositList)
-		depo.POST("/search", depoHandler.GetDepositByNik)
-		depo.POST("/create", depoHandler.Create)
-		depo.PUT("/update", depoHandler.Update)
-		depo.DELETE("/delete", depoHandler.Delete)
 	}
 	transaction := r.Group("/transaction")
 	{
