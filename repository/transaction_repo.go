@@ -6,7 +6,7 @@ import (
 )
 
 type TransactionRepository interface {
-	CreateTransaction(income *model.Transaction) error
+	CreateTransaction(transaction *model.Transaction) error
 	HistoryTransaction(nik string) ([]model.Transaction, error)
 }
 
@@ -18,8 +18,8 @@ func NewTransactionRepository(db *gorm.DB) TransactionRepository {
 	return &transactionRepository{db}
 }
 
-func (r *transactionRepository) CreateTransaction(income *model.Transaction) error {
-	return r.db.Create(income).Error
+func (r *transactionRepository) CreateTransaction(transaction *model.Transaction) error {
+	return r.db.Create(transaction).Error
 }
 
 func (r *transactionRepository) HistoryTransaction(nik string) ([]model.Transaction, error) {

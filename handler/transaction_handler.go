@@ -17,12 +17,12 @@ func NewTransactionHandler(transactionService service.TransactionService) *Trans
 }
 
 func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
-	var income model.Transaction
-	if err := c.ShouldBindJSON(&income); err != nil {
+	var transaction model.Transaction
+	if err := c.ShouldBindJSON(&transaction); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	err := h.transactionService.CreateTransaction(&income)
+	err := h.transactionService.CreateTransaction(&transaction)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -31,11 +31,12 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 }
 
 func (h *TransactionHandler) HistoryTransaction(c *gin.Context) {
-	nik := c.Param("nik")
-	if nik == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "NIK must be not empty"})
+	var transaction model.Transaction
+	if err := c.ShouldBindJSON(&transaction); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	history, err := h.transactionService.HistoryTransaction(nik)
+	history, err := h.transactionService.HistoryTransaction(transaction.NIK)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

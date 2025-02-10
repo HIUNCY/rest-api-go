@@ -6,7 +6,7 @@ import (
 )
 
 type TransactionService interface {
-	CreateTransaction(income *model.Transaction) error
+	CreateTransaction(transaction *model.Transaction) error
 	HistoryTransaction(nik string) ([]model.Transaction, error)
 }
 
@@ -18,9 +18,10 @@ func NewTransactionService(transactionRepo repository.TransactionRepository) Tra
 	return &transactionService{transactionRepo}
 }
 
-func (s *transactionService) CreateTransaction(income *model.Transaction) error {
-	return s.transactionRepo.CreateTransaction(income)
+func (s *transactionService) CreateTransaction(transaction *model.Transaction) error {
+	return s.transactionRepo.CreateTransaction(transaction)
 }
+
 func (s *transactionService) HistoryTransaction(nik string) ([]model.Transaction, error) {
 	return s.transactionRepo.HistoryTransaction(nik)
 }
